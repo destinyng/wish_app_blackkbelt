@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Hello, {{user.first_name}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto"></ul>
+                <span class="navbar-text">
+                        </a> <a href="/logout" role="button"
+                        class="btn btn-sm btn-info ml-2 text-white">Logout</a>
+                        <a href="/wishes/new" role="button"
+                        class="btn btn-sm btn-info ml-2 text-white">Make a wish</a>
+                        <a href="/wishes/stats" role="button"
+                        class="btn btn-sm btn-info ml-2 text-white">Stats</a>
+                </span>
+
+                
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Your Wish List:</h1>
+        <table class="table table-dark">
+            <thead>
+                <th>Item</th>
+                <th>Date added</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+                {% for wish in my_wishes %}
+                <tr>
+                    <td>{{ wish.name }}</td>
+                    <td>{{ wish.created_at }}</td>
+                    <td>
+                        <form action='/wishes/delete/{{wish.id}}' method='POST'>
+                            {% csrf_token %}
+                            
+                            <input type='submit' value='Remove'>
+                        </form> 
+                        <a href="/wishes/edit/{{wish.id}}"><button>Edit</button></a>
+                        
+                        {% if wish.is_granted == False %}
+                        <br>
+                        <!-- <a href="/wishes/make_it_grant/{{wish.id}}" method='POST'><button>Grant</button></a> -->
+
+                        <form action='/wishes/make_it_grant/{{wish.id}}' method='POST'>
+                            {% csrf_token %}
+                            
+                            <input type='submit' value='Grant'>
+                        </form> 
+                        
+
+
+
+                        {% else %}
+                        <a href="#">Granted!</a>
+                        {% endif %}
+                        
+                        
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+        <h1>Granted Wish:</h1>
+
+        <table class="table table-dark">
+            <thead>
+                <th>Item</th>
+                <th>Wisher</th>
+                <th>Date Added</th>
+                <th>Date Granted</th>
+                <th>Likes</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+                {% for wish in all_wishes %}
+                <tr>
+                    <td>{{ wish.name }}</td>
+                    <td>{{ wish.wished_by.first_name }}</td>
+                    <td>{{ wish.created_at }}</td>
+                    <td>{{ wish.granted_at }}</td>
+                    <td>{{ wish.user_that_like_wish.count }}</td>
+
+                    <td>
+                        <!-- user already like -->
+                        {% if user in wish.user_that_like_wish.all %} 
+                        <a href="#"> Liked </a> 
+
+                        <!-- user havent like yet-->
+                        {% else %} 
+                        <!-- <a href="/wishes/like/{{wish.id}}" method="POST"> Like </a>  -->
+
+                        <form action='/wishes/like/{{wish.id}}' method='POST'>
+                            {% csrf_token %}
+                            
+                            <input type='submit' value='Like'>
+                        </form> 
+
+
+
+                        {% endif %} 
+                        
+                        
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+
+
+
+
+        </div>
+            
+</body>
+</html>

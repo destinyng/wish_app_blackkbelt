@@ -1,0 +1,42 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>New wish</title>
+</head>
+
+<body>
+    <h1>Hello {{request.session.first_name}} ! Make a wish! </h1>
+    <a href='/logout'>Logout</a>
+
+    {% if messages %}
+        <ul class="messages">    
+            {% for message in messages %}    
+            <li>{{ message }}</li>    
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form action="/wishes/create" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">I wish for:</label>
+            <input type="text" name="name" id="name" required class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" name="description" id="description" required class="form-control">
+        </div>
+        
+        <button class="btn btn-primary">Submit</button>
+        <button class="btn btn-primary" >Cancel</button>
+    </form>
+</body>
+</html>
+    
+
+</body>
+</html>

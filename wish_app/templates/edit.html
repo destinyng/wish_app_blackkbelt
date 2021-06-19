@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Show</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
+</head>
+<body>
+    <h1>Hello {{request.session.first_name}} ! Let's edit your wish! </h1>
+    <a href='/logout'>Logout</a>
+    {% if messages %}
+        <ul class="messages">    
+            {% for message in messages %}    
+            <li>{{ message }}</li>    
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form action="/wishes/update/{{wish.id}}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">I wish for</label>
+            <input type="text" name="name" id="name" class="form-control" value="{{wish.name}}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" name="description" id="description" class="form-control" value="{{wish.description}}" required>
+        </div>
+        <button class="btn btn-primary">Edit</button>
+    </form>
+</body>
+</html>
